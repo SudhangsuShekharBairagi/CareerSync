@@ -1,10 +1,10 @@
-package com.careerSyncAi.backend;
+package com.careersync.careersync_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class CareersyncBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,13 +1,13 @@
-package com.careerSyncAi.backend;
+package com.careersync.careersync_backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendApplication {
+public class CareersyncBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
+		SpringApplication.run(CareersyncBackendApplication.class, args);
 	}
 
 }
