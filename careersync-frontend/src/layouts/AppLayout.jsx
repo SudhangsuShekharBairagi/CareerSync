@@ -1,38 +1,57 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 
-const navItems = [
+const navGroups = [
   {
-    path: '/resume',
     label: 'Resume',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-        <polyline points="10 9 9 9 8 9" />
-      </svg>
-    ),
+    items: [
+      {
+        path: '/resume',
+        label: 'Resume',
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        ),
+      },
+      {
+        path: '/resume/history',
+        label: 'History',
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        ),
+      },
+    ],
   },
   {
-    path: '/resume/history',
-    label: 'History',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 6 12 12 16 14" />
-      </svg>
-    ),
-  },
-  {
-    path: '/profile',
-    label: 'Profile',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-    ),
+    label: 'Analyser',
+    items: [
+      {
+        path: '/analyser',
+        label: 'Analyser',
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+        ),
+      },
+      {
+        path: '/analyser/history',
+        label: 'History',
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        ),
+      },
+    ],
   },
 ]
 
@@ -60,38 +79,45 @@ export default function AppLayout() {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
-          <p style={{ padding: '0 12px', marginBottom: '10px', fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#424754' }}>Menu</p>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end
-              style={({ isActive }) => ({
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: 500,
-                textDecoration: 'none',
-                color: isActive ? '#3b82f6' : '#c2c6d6',
-                backgroundColor: isActive ? 'rgba(59,130,246,0.1)' : 'transparent',
-                marginBottom: '2px',
-                transition: 'all 0.15s',
-                position: 'relative',
-              })}
-            >
-              {({ isActive }) => (
-                <>
-                  {isActive && (
-                    <span style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: '3px', height: '60%', background: '#3b82f6', borderRadius: '0 2px 2px 0' }} />
+          {navGroups.map((group, gi) => (
+            <div key={group.label} style={{ marginBottom: gi < navGroups.length - 1 ? '8px' : 0 }}>
+              <p style={{ padding: '0 12px', marginBottom: '6px', marginTop: gi > 0 ? '14px' : 0, fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#424754' }}>
+                {group.label}
+              </p>
+              {gi > 0 && <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)', margin: '-4px 0 10px' }} />}
+              {group.items.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  end
+                  style={({ isActive }) => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    color: isActive ? '#3b82f6' : '#c2c6d6',
+                    backgroundColor: isActive ? 'rgba(59,130,246,0.1)' : 'transparent',
+                    marginBottom: '2px',
+                    transition: 'all 0.15s',
+                    position: 'relative',
+                  })}
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && (
+                        <span style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: '3px', height: '60%', background: '#3b82f6', borderRadius: '0 2px 2px 0' }} />
+                      )}
+                      {item.icon}
+                      {item.label}
+                    </>
                   )}
-                  {item.icon}
-                  {item.label}
-                </>
-              )}
-            </NavLink>
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 
