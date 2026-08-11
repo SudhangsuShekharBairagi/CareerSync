@@ -38,6 +38,132 @@
   --border-radius-md: 0.75rem;
   --border-radius-lg: 1rem;
   --border-radius-xl: 1.5rem;
+
+  /* ── Landing-page animation tokens ── */
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: land-fade-in 0.6s ease forwards;
+  --animate-slide-left: slide-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-right: slide-right 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-in: scale-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-float-gentle: float-gentle 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+
+/* ── Keyframes for landing-page animations ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes land-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Scroll-reveal: hidden by default, revealed when .is-visible is added ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: none;
+}
+.reveal.is-visible {
+  animation: var(--animate-fade-up);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+.reveal-left.is-visible {
+  animation: var(--animate-slide-left);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+}
+.reveal-right.is-visible {
+  animation: var(--animate-slide-right);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+}
+.reveal-scale.is-visible {
+  animation: var(--animate-scale-in);
+}
+
+/* ── Stagger delays for child items ── */
+.stagger-1 { animation-delay: 0.08s !important; }
+.stagger-2 { animation-delay: 0.16s !important; }
+.stagger-3 { animation-delay: 0.24s !important; }
+.stagger-4 { animation-delay: 0.32s !important; }
+
+/* ── Button hover effects ── */
+.btn-hover-lift {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              background-color 0.15s ease;
+}
+.btn-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.08);
+}
+.btn-hover-lift:active {
+  transform: translateY(0);
+}
+
+.btn-hover-glow {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s ease,
+              border-color 0.15s ease;
+}
+.btn-hover-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(103, 152, 255, 0.15),
+              0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: #454545;
+}
+.btn-hover-glow:active {
+  transform: translateY(0);
+}
+
+/* ── Card hover effect ── */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  border-color: #454545;
 }
 
 *, *::before, *::after {

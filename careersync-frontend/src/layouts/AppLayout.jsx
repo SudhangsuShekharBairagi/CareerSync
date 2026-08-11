@@ -1,4 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { t, fontMono } from '../theme/tokens'
 
 const navGroups = [
   {
@@ -59,32 +60,22 @@ export default function AppLayout() {
   const navigate = useNavigate()
 
   return (
-    <div style={{ display: 'flex', height: '100vh', backgroundColor: '#0f131f', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', height: '100vh', backgroundColor: t.bg, overflow: 'hidden' }}>
       {/* Sidebar */}
-      <aside style={{ width: '240px', flexShrink: 0, display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(255,255,255,0.06)', backgroundColor: '#0a0e1a' }}>
+      <aside style={{ width: '240px', flexShrink: 0, display: 'flex', flexDirection: 'column', borderRight: `1px solid ${t.steelBorder}`, backgroundColor: t.deepCoal }}>
         {/* Logo */}
-        <div style={{ height: '64px', display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #3b82f6, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div> */}
-            <div>
-              <div style={{ fontSize: '18px', fontWeight: 700, color: '#dfe2f3', letterSpacing: '-0.3px' }}>CareerSync</div>
-              {/* <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '9px', color: '#3b82f6', letterSpacing: '3px', textTransform: 'uppercase' }}>AI</div> */}
-            </div>
-          </div>
+        <div style={{ height: '64px', display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: `1px solid ${t.steelBorder}` }}>
+          <div style={{ fontSize: '18px', fontWeight: 700, color: t.onSurface, letterSpacing: '-0.3px' }}>CareerSync</div>
         </div>
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
           {navGroups.map((group, gi) => (
             <div key={group.label} style={{ marginBottom: gi < navGroups.length - 1 ? '8px' : 0 }}>
-              <p style={{ padding: '0 12px', marginBottom: '6px', marginTop: gi > 0 ? '14px' : 0, fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#424754' }}>
+              <p style={{ padding: '0 12px', marginBottom: '6px', marginTop: gi > 0 ? '14px' : 0, fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.graphite }}>
                 {group.label}
               </p>
-              {gi > 0 && <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)', margin: '-4px 0 10px' }} />}
+              {gi > 0 && <div style={{ height: '1px', background: t.steelBorder, margin: '-4px 0 10px' }} />}
               {group.items.map((item) => (
                 <NavLink
                   key={item.path}
@@ -99,8 +90,8 @@ export default function AppLayout() {
                     fontSize: '13px',
                     fontWeight: 500,
                     textDecoration: 'none',
-                    color: isActive ? '#3b82f6' : '#c2c6d6',
-                    backgroundColor: isActive ? 'rgba(59,130,246,0.1)' : 'transparent',
+                    color: isActive ? t.primaryCont : t.ash,
+                    backgroundColor: isActive ? 'rgba(103,152,255,0.1)' : 'transparent',
                     marginBottom: '2px',
                     transition: 'all 0.15s',
                     position: 'relative',
@@ -109,7 +100,7 @@ export default function AppLayout() {
                   {({ isActive }) => (
                     <>
                       {isActive && (
-                        <span style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: '3px', height: '60%', background: '#3b82f6', borderRadius: '0 2px 2px 0' }} />
+                        <span style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: '3px', height: '60%', background: t.primaryCont, borderRadius: '0 2px 2px 0' }} />
                       )}
                       {item.icon}
                       {item.label}
@@ -122,10 +113,10 @@ export default function AppLayout() {
         </nav>
 
         {/* Sign out */}
-        <div style={{ padding: '12px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ padding: '12px', borderTop: `1px solid ${t.steelBorder}` }}>
           <button
             onClick={() => navigate('/login')}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', fontSize: '13px', color: '#c2c6d6', background: 'transparent', border: 'none', cursor: 'pointer', transition: 'all 0.15s' }}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', fontSize: '13px', color: t.ash, background: 'transparent', border: 'none', cursor: 'pointer', transition: 'all 0.15s' }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -140,27 +131,27 @@ export default function AppLayout() {
       {/* Main content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Top bar */}
-        <header style={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: '1px solid rgba(255,255,255,0.06)', backgroundColor: 'rgba(15,19,31,0.8)', backdropFilter: 'blur(20px)', flexShrink: 0 }}>
+        <header style={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: `1px solid ${t.steelBorder}`, backgroundColor: t.bg, flexShrink: 0 }}>
           <div style={{ position: 'relative' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8c909f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.fog} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
               type="search"
               placeholder="Search..."
-              style={{ background: '#0a0e1a', border: '1px solid rgba(255,255,255,0.1)', color: '#dfe2f3', outline: 'none', padding: '8px 14px 8px 34px', borderRadius: '8px', fontSize: '13px', width: '220px', fontFamily: 'Inter, sans-serif' }}
+              style={{ background: t.deepCoal, border: `1px solid ${t.steelBorder}`, color: t.onSurface, outline: 'none', padding: '8px 14px 8px 34px', borderRadius: '8px', fontSize: '13px', width: '220px', fontFamily: 'Inter, sans-serif' }}
             />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button style={{ position: 'relative', padding: '8px', borderRadius: '8px', color: '#8c909f', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+            <button style={{ position: 'relative', padding: '8px', borderRadius: '8px', color: t.fog, background: 'transparent', border: 'none', cursor: 'pointer' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
-              <span style={{ position: 'absolute', top: '6px', right: '6px', width: '6px', height: '6px', background: '#3b82f6', borderRadius: '50%' }} />
+              <span style={{ position: 'absolute', top: '6px', right: '6px', width: '6px', height: '6px', background: t.primaryCont, borderRadius: '50%' }} />
             </button>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: 600 }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: t.graphite, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: 600 }}>
               A
             </div>
           </div>

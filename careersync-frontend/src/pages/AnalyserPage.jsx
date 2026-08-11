@@ -1,16 +1,6 @@
 import { useState } from 'react'
 import { uploadResume } from '../api/AnaysisApi'
-import CandidateAnalysis from '../components/CandidateAnalysis'
-
-const s = {
-  card: {
-    background: 'rgba(255,255,255,0.03)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: '14px',
-    padding: '24px',
-  },
-}
+import { t, fontInter, fontMono, s } from '../theme/tokens'
 
 function FileIcon({ type }) {
   if (type === 'application/pdf') {
@@ -39,14 +29,14 @@ function ScoreRing({ score }) {
   return (
     <div style={{ position: 'relative', width: '96px', height: '96px', flexShrink: 0 }}>
       <svg width="96" height="96" viewBox="0 0 96 96" style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx="48" cy="48" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+        <circle cx="48" cy="48" r={radius} fill="none" stroke={t.deepCoal} strokeWidth="8" />
         <circle cx="48" cy="48" r={radius} fill="none" stroke={color} strokeWidth="8"
           strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
           style={{ transition: 'stroke-dasharray 0.8s ease' }} />
       </svg>
       <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ fontSize: '20px', fontWeight: 800, color, lineHeight: 1 }}>{score}</span>
-        <span style={{ fontSize: '9px', color: '#8c909f', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '1px' }}>ATS</span>
+        <span style={{ fontSize: '9px', color: t.fog, ...fontMono, letterSpacing: '1px' }}>ATS</span>
       </div>
     </div>
   )
@@ -54,15 +44,15 @@ function ScoreRing({ score }) {
 
 function SkillBadge({ label, variant = 'blue' }) {
   const colors = {
-    blue: { bg: 'rgba(59,130,246,0.1)', border: 'rgba(59,130,246,0.2)', color: '#93c5fd' },
-    purple: { bg: 'rgba(99,102,241,0.1)', border: 'rgba(99,102,241,0.2)', color: '#a5b4fc' },
+    blue: { bg: t.deepCoal, border: t.steelBorder, color: t.primaryLight },
+    purple: { bg: t.deepCoal, border: t.steelBorder, color: '#c084fc' },
     green: { bg: 'rgba(74,222,128,0.1)', border: 'rgba(74,222,128,0.2)', color: '#86efac' },
     red: { bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.2)', color: '#fca5a5' },
     orange: { bg: 'rgba(251,191,36,0.1)', border: 'rgba(251,191,36,0.2)', color: '#fcd34d' },
   }
   const c = colors[variant]
   return (
-    <span style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.color, fontSize: '12px', padding: '4px 12px', borderRadius: '20px', fontWeight: 500 }}>
+    <span style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.color, fontSize: '12px', padding: '4px 12px', borderRadius: '6px', fontWeight: 500 }}>
       {label}
     </span>
   )
@@ -70,36 +60,35 @@ function SkillBadge({ label, variant = 'blue' }) {
 
 function AnalysisResult({ data }) {
   const { candidateName, candidateSummary, technicalSkills = [], softSkills = [], strengths = [], weaknesses = [], missingKeywords = [], recommendedJobs = [], atsScore } = data
-  const scoreColor = atsScore >= 80 ? '#4ade80' : atsScore >= 60 ? '#fbbf24' : '#f87171'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', animation: 'fadeInUp 0.5s ease forwards' }}>
       {/* Header card */}
       <div style={{ ...s.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#3b82f6', marginBottom: '6px' }}>CANDIDATE</div>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#dfe2f3', margin: 0 }}>{candidateName}</h2>
-          <p style={{ fontSize: '13px', color: '#8c909f', marginTop: '4px' }}>Resume Analysis Report</p>
+          <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.primaryCont, marginBottom: '6px' }}>CANDIDATE</div>
+          <h2 style={{ fontSize: '22px', fontWeight: 700, color: t.onSurface, margin: 0 }}>{candidateName}</h2>
+          <p style={{ fontSize: '13px', color: t.fog, marginTop: '4px' }}>Resume Analysis Report</p>
         </div>
         <ScoreRing score={atsScore} />
       </div>
 
       {/* Summary */}
       <div style={s.card}>
-        <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#3b82f6', marginBottom: '10px' }}>SUMMARY</div>
-        <p style={{ fontSize: '13.5px', color: '#c2c6d6', lineHeight: 1.75, margin: 0 }}>{candidateSummary}</p>
+        <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.primaryCont, marginBottom: '10px' }}>SUMMARY</div>
+        <p style={{ fontSize: '13.5px', color: t.ash, lineHeight: 1.75, margin: 0 }}>{candidateSummary}</p>
       </div>
 
       {/* Skills row */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={s.card}>
-          <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#a5b4fc', marginBottom: '12px' }}>TECHNICAL SKILLS</div>
+          <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.primaryLight, marginBottom: '12px' }}>TECHNICAL SKILLS</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {technicalSkills.map((sk) => <SkillBadge key={sk} label={sk} variant="purple" />)}
           </div>
         </div>
         <div style={s.card}>
-          <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#93c5fd', marginBottom: '12px' }}>SOFT SKILLS</div>
+          <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.primaryCont, marginBottom: '12px' }}>SOFT SKILLS</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {softSkills.map((sk) => <SkillBadge key={sk} label={sk} variant="blue" />)}
           </div>
@@ -108,12 +97,12 @@ function AnalysisResult({ data }) {
 
       {/* Strengths */}
       <div style={s.card}>
-        <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#4ade80', marginBottom: '12px' }}>STRENGTHS</div>
+        <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: '#4ade80', marginBottom: '12px' }}>STRENGTHS</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {strengths.map((s, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 12px', background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.1)', borderRadius: '8px' }}>
+          {strengths.map((st, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 12px', background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.15)', borderRadius: '8px' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}><polyline points="20 6 9 17 4 12" /></svg>
-              <span style={{ fontSize: '13px', color: '#c2c6d6', lineHeight: 1.6 }}>{s}</span>
+              <span style={{ fontSize: '13px', color: t.ash, lineHeight: 1.6 }}>{st}</span>
             </div>
           ))}
         </div>
@@ -122,14 +111,14 @@ function AnalysisResult({ data }) {
       {/* Weaknesses & Missing Keywords */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <div style={s.card}>
-          <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#fcd34d', marginBottom: '12px' }}>AREAS TO IMPROVE</div>
+          <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: '#fcd34d', marginBottom: '12px' }}>AREAS TO IMPROVE</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {weaknesses.map((w) => <SkillBadge key={w} label={w} variant="orange" />)}
           </div>
         </div>
         <div style={s.card}>
-          <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#fca5a5', marginBottom: '8px' }}>MISSING KEYWORDS</div>
-          <p style={{ fontSize: '11px', color: '#8c909f', marginBottom: '10px' }}>Add these to improve your ATS score</p>
+          <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: '#fca5a5', marginBottom: '8px' }}>MISSING KEYWORDS</div>
+          <p style={{ fontSize: '11px', color: t.fog, marginBottom: '10px' }}>Add these to improve your ATS score</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {missingKeywords.map((kw) => <SkillBadge key={kw} label={kw} variant="red" />)}
           </div>
@@ -138,12 +127,12 @@ function AnalysisResult({ data }) {
 
       {/* Recommended Jobs */}
       <div style={s.card}>
-        <div style={{ fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", textTransform: 'uppercase', letterSpacing: '2px', color: '#a5b4fc', marginBottom: '14px' }}>RECOMMENDED JOBS</div>
+        <div style={{ fontSize: '10px', ...fontMono, textTransform: 'uppercase', letterSpacing: '2px', color: t.primaryLight, marginBottom: '14px' }}>RECOMMENDED JOBS</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
           {recommendedJobs.map((job, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '10px' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>
-              <span style={{ fontSize: '13px', color: '#c2c6d6', fontWeight: 500 }}>{job}</span>
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: t.deepCoal, border: `1px solid ${t.steelBorder}`, borderRadius: '8px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={t.primaryCont} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>
+              <span style={{ fontSize: '13px', color: t.ash, fontWeight: 500 }}>{job}</span>
             </div>
           ))}
         </div>
@@ -194,11 +183,11 @@ export default function AnalyserPage() {
   const handleReset = () => { setFile(null); setAnalysisData(null); setError(null) }
 
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ ...fontInter, display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
       <div>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#dfe2f3', margin: '0 0 6px' }}>Resume Analyser</h1>
-        <p style={{ fontSize: '13px', color: '#8c909f', margin: 0 }}>Upload your resume and get an ATS score, skill breakdown, and personalised career insights.</p>
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: t.onSurface, margin: '0 0 6px' }}>Resume Analyser</h1>
+        <p style={{ fontSize: '13px', color: t.fog, margin: 0 }}>Upload your resume and get an ATS score, skill breakdown, and personalised career insights.</p>
       </div>
 
       {/* Upload card — hidden once analysis is shown */}
@@ -213,24 +202,24 @@ export default function AnalyserPage() {
             style={{
               display: 'block',
               cursor: 'pointer',
-              border: `2px dashed ${dragOver ? '#3b82f6' : 'rgba(255,255,255,0.1)'}`,
-              borderRadius: '12px',
+              border: `2px dashed ${dragOver ? t.primaryCont : t.steelBorder}`,
+              borderRadius: '8px',
               padding: '40px 24px',
               textAlign: 'center',
-              background: dragOver ? 'rgba(59,130,246,0.06)' : 'transparent',
+              background: dragOver ? t.deepCoal : 'transparent',
               transition: 'all 0.2s',
             }}
           >
-            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: t.deepCoal, border: `1px solid ${t.steelBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={t.primaryCont} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" />
                 <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
               </svg>
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 600, color: '#dfe2f3', marginBottom: '4px' }}>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: t.onSurface, marginBottom: '4px' }}>
               {file ? file.name : 'Drop your resume here'}
             </div>
-            <div style={{ fontSize: '12px', color: '#8c909f' }}>
+            <div style={{ fontSize: '12px', color: t.fog }}>
               {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : 'Click to browse · PDF, DOC, DOCX supported'}
             </div>
             <input id="analyser-upload" type="file" accept=".pdf,.doc,.docx" onChange={handleFileUpload} style={{ display: 'none' }} />
@@ -238,9 +227,9 @@ export default function AnalyserPage() {
 
           {/* File chip */}
           {file && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '14px', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
-              <div style={{ color: '#3b82f6', flexShrink: 0 }}><FileIcon type={file.type} /></div>
-              <span style={{ fontSize: '13px', color: '#c2c6d6', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '14px', padding: '10px 14px', background: t.deepCoal, border: `1px solid ${t.steelBorder}`, borderRadius: '8px' }}>
+              <div style={{ color: t.primaryCont, flexShrink: 0 }}><FileIcon type={file.type} /></div>
+              <span style={{ fontSize: '13px', color: t.ash, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
             </div>
           )}
@@ -252,11 +241,11 @@ export default function AnalyserPage() {
             style={{
               width: '100%',
               marginTop: '18px',
-              background: file && !loading ? 'linear-gradient(135deg,#3b82f6,#6366f1)' : 'rgba(255,255,255,0.06)',
-              color: file && !loading ? 'white' : '#424754',
-              border: 'none',
+              background: file && !loading ? '#fff' : t.deepCoal,
+              color: file && !loading ? t.bg : t.fog,
+              border: file && !loading ? 'none' : `1px solid ${t.steelBorder}`,
               padding: '13px 20px',
-              borderRadius: '10px',
+              borderRadius: '8px',
               fontSize: '13px',
               fontWeight: 600,
               cursor: file && !loading ? 'pointer' : 'not-allowed',
@@ -264,8 +253,7 @@ export default function AnalyserPage() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              fontFamily: 'Inter, sans-serif',
-              boxShadow: file && !loading ? '0 4px 20px rgba(59,130,246,0.25)' : 'none',
+              ...fontInter,
               transition: 'all 0.2s',
             }}
           >
@@ -287,8 +275,8 @@ export default function AnalyserPage() {
             <div style={{ marginTop: '16px' }}>
               <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                 {['Parsing document', 'Extracting skills', 'Scoring ATS', 'Generating insights'].map((step, i) => (
-                  <span key={step} style={{ fontSize: '11px', color: '#8c909f', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: `spin 1s linear ${i * 0.2}s infinite` }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                  <span key={step} style={{ fontSize: '11px', color: t.fog, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={t.primaryCont} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: `spin 1s linear ${i * 0.2}s infinite` }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
                     {step}
                   </span>
                 ))}
@@ -316,7 +304,7 @@ export default function AnalyserPage() {
             </div>
             <button
               onClick={handleReset}
-              style={{ background: 'transparent', color: '#8c909f', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 14px', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Inter, sans-serif' }}
+              style={{ background: 'transparent', color: t.fog, border: `1px solid ${t.steelBorder}`, padding: '8px 14px', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', ...fontInter }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" /></svg>
               Analyse Another

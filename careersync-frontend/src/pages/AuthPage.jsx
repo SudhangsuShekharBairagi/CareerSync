@@ -1,16 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-const s = {
-  page: { minHeight: '100vh', display: 'flex', backgroundColor: '#0f131f', fontFamily: 'Inter, sans-serif', overflow: 'hidden' },
-  leftPanel: { display: 'none', width: '50%', position: 'relative', overflow: 'hidden', backgroundColor: '#0a0e1a', flexDirection: 'column' },
-  rightPanel: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px', position: 'relative' },
-  card: { background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' },
-  inputField: { background: '#0a0e1a', border: '1px solid rgba(255,255,255,0.1)', color: '#dfe2f3', outline: 'none', padding: '11px 14px', borderRadius: '8px', fontSize: '13px', width: '100%', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif', transition: 'border 0.2s' },
-  label: { display: 'block', fontSize: '12px', fontWeight: 500, color: '#c2c6d6', marginBottom: '6px' },
-  btnPrimary: { background: 'linear-gradient(135deg,#3b82f6,#6366f1)', color: 'white', border: 'none', padding: '13px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', fontFamily: 'Inter, sans-serif' },
-  btnGoogle: { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#dfe2f3', padding: '11px 20px', borderRadius: '8px', fontSize: '13px', fontWeight: 500, cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontFamily: 'Inter, sans-serif' },
-}
+import { t, fontInter, fontMono, s } from '../theme/tokens'
 
 export default function AuthPage({ mode = 'login' }) {
   const [tab, setTab] = useState(mode)
@@ -22,107 +12,78 @@ export default function AuthPage({ mode = 'login' }) {
     navigate('/resume')
   }
 
+  const isLogin = tab === 'login'
+
   return (
-    <div style={s.page}>
-      {/* Left decorative panel — visible only on large screens */}
-      <div style={{ ...s.leftPanel, display: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'flex' : 'none' }}>
-        {/* Orbs */}
-        <div style={{ position: 'absolute', width: '350px', height: '350px', borderRadius: '50%', background: 'rgba(59,130,246,0.12)', filter: 'blur(70px)', top: '-80px', left: '-80px', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(99,102,241,0.1)', filter: 'blur(70px)', bottom: '60px', right: '20px', pointerEvents: 'none' }} />
-        {/* Grid lines */}
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.15) 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      backgroundColor: t.bg, ...fontInter,
+      backgroundImage: `linear-gradient(${t.cardCarbon} 1px, transparent 1px), linear-gradient(90deg, ${t.cardCarbon} 1px, transparent 1px)`,
+      backgroundSize: '40px 40px', backgroundPosition: 'center top',
+      padding: '40px 24px',
+    }}>
 
-        <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '48px 56px' }}>
-          {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '56px' }}>
-            {/* <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg,#3b82f6,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px rgba(59,130,246,0.3)' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div> */}
-            <div>
-              <span style={{ fontSize: '18px', fontWeight: 700, color: '#dfe2f3' }}>CareerSync</span>
-              {/* <span style={{ marginLeft: '4px', fontFamily: "'JetBrains Mono',monospace", fontSize: '10px', color: '#3b82f6', letterSpacing: '2px', textTransform: 'uppercase' }}>AI</span> */}
-            </div>
-          </Link>
+      {/* ── Centred auth card ── */}
+      <div style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 10 }}>
 
-          <h1 style={{ fontSize: '36px', fontWeight: 700, color: '#dfe2f3', lineHeight: 1.2, marginBottom: '14px' }}>
-            Your AI Career<br />
-            <span style={{ background: 'linear-gradient(135deg,#3b82f6,#6366f1,#0ea5e9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-              Command Center
-            </span>
-          </h1>
-          <p style={{ fontSize: '14px', color: '#c2c6d6', lineHeight: 1.7, marginBottom: '40px', maxWidth: '320px' }}>
-            One platform to optimize your resume, track applications, and unlock your career potential with AI.
-          </p>
+        {/* Logo / home link */}
+        <Link to="/" style={{
+          display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none',
+          justifyContent: 'center', marginBottom: 32,
+        }}>
+          <span style={{ ...fontInter, fontSize: 24, fontWeight: 600, letterSpacing: '-0.5px', color: t.onSurface }}>
+            CareerSync
+          </span>
+        </Link>
 
-          {/* Feature checkmarks */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {['AI Resume Scoring & Optimization', 'Smart Job Application Tracker', 'Personalized Career Insights'].map((feat) => (
-              <div key={feat} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </div>
-                <span style={{ fontSize: '13px', color: '#c2c6d6' }}>{feat}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Floating stat cards */}
-          <div style={{ display: 'flex', gap: '12px', marginTop: '48px' }}>
-            {[{ val: '87%', lbl: 'Avg Resume Score', color: '#60a5fa' }, { val: '3.2x', lbl: 'More Callbacks', color: '#818cf8' }].map((st) => (
-              <div key={st.lbl} style={{ ...s.card, padding: '14px 18px' }}>
-                <div style={{ fontSize: '22px', fontWeight: 700, color: st.color }}>{st.val}</div>
-                <div style={{ fontSize: '11px', color: '#8c909f', marginTop: '2px' }}>{st.lbl}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Right auth panel */}
-      <div style={s.rightPanel}>
-        <div style={{ position: 'absolute', width: '300px', height: '300px', borderRadius: '50%', background: 'rgba(59,130,246,0.07)', filter: 'blur(80px)', top: 0, right: 0, pointerEvents: 'none' }} />
-
-        <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 10 }}>
-          {/* Mobile logo */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '28px' }}>
-            {/* <div style={{ width: '30px', height: '30px', borderRadius: '7px', background: 'linear-gradient(135deg,#3b82f6,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div> */}
-            {/* <span style={{ fontSize: '18px', fontWeight: 700, color: '#dfe2f3' }}>CareerSync</span> */}
-          </div>
+        {/* Card shell */}
+        <div style={s.card}>
 
           {/* Tab switcher */}
-          <div style={{ ...s.card, padding: '4px', display: 'flex', marginBottom: '28px' }}>
-            {['login', 'register'].map((t) => (
+          <div style={{
+            display: 'flex', background: t.deepCoal, borderRadius: 8,
+            border: `1px solid ${t.steelBorder}`, padding: 3, marginBottom: 28,
+          }}>
+            {['login', 'register'].map((v) => (
               <button
-                key={t}
-                id={`tab-${t}`}
-                onClick={() => setTab(t)}
-                style={{ flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', border: 'none', fontFamily: 'Inter, sans-serif', transition: 'all 0.2s', background: tab === t ? 'linear-gradient(135deg,#3b82f6,#6366f1)' : 'transparent', color: tab === t ? 'white' : '#8c909f' }}
+                key={v}
+                id={`tab-${v}`}
+                onClick={() => setTab(v)}
+                style={{
+                  flex: 1, padding: '10px 0', borderRadius: 6, fontSize: 13,
+                  fontWeight: 600, cursor: 'pointer', border: 'none', ...fontInter,
+                  transition: 'all 0.15s',
+                  background: tab === v ? '#fff' : 'transparent',
+                  color: tab === v ? t.bg : t.fog,
+                }}
               >
-                {t === 'login' ? 'Sign In' : 'Create Account'}
+                {v === 'login' ? 'Sign In' : 'Create Account'}
               </button>
             ))}
           </div>
 
-          {/* Title */}
-          <div style={{ marginBottom: '24px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#dfe2f3', marginBottom: '4px' }}>
-              {tab === 'login' ? 'Welcome back' : 'Get started today'}
+          {/* Heading */}
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ ...fontInter, fontSize: 22, fontWeight: 600, color: t.onSurface, letterSpacing: '-0.5px', marginBottom: 4 }}>
+              {isLogin ? 'Welcome back' : 'Get started today'}
             </h2>
-            <p style={{ fontSize: '13px', color: '#8c909f' }}>
-              {tab === 'login' ? 'Sign in to your CareerSync AI account' : 'Create your free account — no credit card required'}
+            <p style={{ fontSize: 13, color: t.fog }}>
+              {isLogin
+                ? 'Sign in to your CareerSync account'
+                : 'Create your free account — no credit card required'}
             </p>
           </div>
 
-          {/* Google */}
-          <button id="btn-google-auth" style={s.btnGoogle}>
+          {/* Google button */}
+          <button id="btn-google-auth" style={{
+            background: t.deepCoal, border: `1px solid ${t.steelBorder}`, color: t.onSurface,
+            padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 500,
+            cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', gap: 10, ...fontInter, transition: 'border-color 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = t.graphite}
+          onMouseLeave={e => e.currentTarget.style.borderColor = t.steelBorder}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -133,23 +94,29 @@ export default function AuthPage({ mode = 'login' }) {
           </button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '18px 0' }}>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
-            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '11px', color: '#424754' }}>or</span>
-            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
+            <div style={{ flex: 1, height: 1, background: t.steelBorder }} />
+            <span style={{ ...fontMono, fontSize: 11, letterSpacing: '0.85px', color: t.fog }}>or</span>
+            <div style={{ flex: 1, height: 1, background: t.steelBorder }} />
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {tab === 'register' && (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {!isLogin && (
               <div>
                 <label style={s.label}>Full Name</label>
-                <input id="input-name" type="text" placeholder="Alex Johnson" required style={s.inputField} />
+                <input id="input-name" type="text" placeholder="Alex Johnson" required style={s.input}
+                  onFocus={e => e.target.style.borderColor = t.primaryCont}
+                  onBlur={e => e.target.style.borderColor = t.steelBorder}
+                />
               </div>
             )}
             <div>
               <label style={s.label}>Email Address</label>
-              <input id="input-email" type="email" placeholder="alex@company.com" required style={s.inputField} />
+              <input id="input-email" type="email" placeholder="alex@company.com" required style={s.input}
+                onFocus={e => e.target.style.borderColor = t.primaryCont}
+                onBlur={e => e.target.style.borderColor = t.steelBorder}
+              />
             </div>
             <div>
               <label style={s.label}>Password</label>
@@ -159,12 +126,18 @@ export default function AuthPage({ mode = 'login' }) {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   required
-                  style={{ ...s.inputField, paddingRight: '40px' }}
+                  style={{ ...s.input, paddingRight: 42 }}
+                  onFocus={e => e.target.style.borderColor = t.primaryCont}
+                  onBlur={e => e.target.style.borderColor = t.steelBorder}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#8c909f', display: 'flex', padding: 0 }}
+                  style={{
+                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer', color: t.fog,
+                    display: 'flex', padding: 0,
+                  }}
                 >
                   {showPassword ? (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -181,32 +154,52 @@ export default function AuthPage({ mode = 'login' }) {
                 </button>
               </div>
             </div>
-            {tab === 'register' && (
+            {!isLogin && (
               <div>
                 <label style={s.label}>Confirm Password</label>
-                <input id="input-confirm-password" type="password" placeholder="••••••••" required style={s.inputField} />
+                <input id="input-confirm-password" type="password" placeholder="••••••••" required style={s.input}
+                  onFocus={e => e.target.style.borderColor = t.primaryCont}
+                  onBlur={e => e.target.style.borderColor = t.steelBorder}
+                />
               </div>
             )}
-            {tab === 'login' && (
+            {isLogin && (
               <div style={{ textAlign: 'right' }}>
-                <a href="#" style={{ fontSize: '12px', color: '#60a5fa', textDecoration: 'none' }}>Forgot password?</a>
+                <a href="#" style={{ fontSize: 12, color: t.primaryCont, textDecoration: 'none' }}>Forgot password?</a>
               </div>
             )}
-            <button id="btn-submit-auth" type="submit" style={{ ...s.btnPrimary, marginTop: '4px' }}>
-              {tab === 'login' ? 'Sign In to CareerSync' : 'Create Free Account'}
+            <button id="btn-submit-auth" type="submit" style={{
+              background: '#fff', color: t.bg, border: 'none',
+              padding: '13px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600,
+              cursor: 'pointer', width: '100%', ...fontInter, marginTop: 4,
+              transition: 'background 0.15s',
+            }}>
+              {isLogin ? 'Sign In to CareerSync' : 'Create Free Account'}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: '12px', color: '#8c909f', marginTop: '20px' }}>
-            {tab === 'login' ? "Don't have an account? " : 'Already have an account? '}
+          {/* Toggle link */}
+          <p style={{ textAlign: 'center', fontSize: 12, color: t.fog, marginTop: 20 }}>
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
             <button
-              onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
-              style={{ color: '#60a5fa', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '12px', fontFamily: 'Inter, sans-serif' }}
+              onClick={() => setTab(isLogin ? 'register' : 'login')}
+              style={{
+                color: t.primaryCont, background: 'none', border: 'none',
+                cursor: 'pointer', fontWeight: 600, fontSize: 12, ...fontInter,
+              }}
             >
-              {tab === 'login' ? 'Create one' : 'Sign in'}
+              {isLogin ? 'Create one' : 'Sign in'}
             </button>
           </p>
         </div>
+
+        {/* Footer note */}
+        <p style={{
+          textAlign: 'center', marginTop: 24,
+          ...fontMono, fontSize: 11, letterSpacing: '0.85px', color: t.fog,
+        }}>
+          © 2026 CAREERSYNC SYSTEMS
+        </p>
       </div>
     </div>
   )
