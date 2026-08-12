@@ -198,7 +198,7 @@ export default function AuthPage({ mode = 'login' }) {
           textAlign: 'center', marginTop: 24,
           ...fontMono, fontSize: 11, letterSpacing: '0.85px', color: t.fog,
         }}>
-          © 2026 CAREERSYNC SYSTEMS
+          © 2026 CAREERSYNC
         </p>
       </div>
     </div>

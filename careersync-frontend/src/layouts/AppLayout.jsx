@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { t, fontMono } from '../theme/tokens'
 
 const navGroups = [
@@ -58,6 +58,8 @@ const navGroups = [
 
 export default function AppLayout() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const hideHeaderTools = ['/resume', '/resume/history', '/analyser', '/analyser/history'].includes(location.pathname)
 
   return (
     <div style={{ display: 'flex', height: '100vh', backgroundColor: t.bg, overflow: 'hidden' }}>
@@ -132,25 +134,29 @@ export default function AppLayout() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Top bar */}
         <header style={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: `1px solid ${t.steelBorder}`, backgroundColor: t.bg, flexShrink: 0 }}>
-          <div style={{ position: 'relative' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.fog} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              type="search"
-              placeholder="Search..."
-              style={{ background: t.deepCoal, border: `1px solid ${t.steelBorder}`, color: t.onSurface, outline: 'none', padding: '8px 14px 8px 34px', borderRadius: '8px', fontSize: '13px', width: '220px', fontFamily: 'Inter, sans-serif' }}
-            />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button style={{ position: 'relative', padding: '8px', borderRadius: '8px', color: t.fog, background: 'transparent', border: 'none', cursor: 'pointer' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          {!hideHeaderTools && (
+            <div style={{ position: 'relative' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.fog} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <span style={{ position: 'absolute', top: '6px', right: '6px', width: '6px', height: '6px', background: t.primaryCont, borderRadius: '50%' }} />
-            </button>
+              <input
+                type="search"
+                placeholder="Search..."
+                style={{ background: t.deepCoal, border: `1px solid ${t.steelBorder}`, color: t.onSurface, outline: 'none', padding: '8px 14px 8px 34px', borderRadius: '8px', fontSize: '13px', width: '220px', fontFamily: 'Inter, sans-serif' }}
+              />
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
+            {!hideHeaderTools && (
+              <button style={{ position: 'relative', padding: '8px', borderRadius: '8px', color: t.fog, background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span style={{ position: 'absolute', top: '6px', right: '6px', width: '6px', height: '6px', background: t.primaryCont, borderRadius: '50%' }} />
+              </button>
+            )}
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: t.graphite, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: 600 }}>
               A
             </div>

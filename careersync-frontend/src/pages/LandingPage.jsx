@@ -38,7 +38,7 @@ export default function LandingPage() {
 
           {/* Centre links */}
           <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-            {['Features', 'Templates', 'Pricing'].map(l => (
+            {['Home', 'Features', 'Contact Us'].map(l => (
               <a key={l} href={`#${l.toLowerCase()}`} style={{
                 ...fontInter, fontSize: 16, fontWeight: 500, color: t.ash, textDecoration: 'none',
                 transition: 'color 0.15s',
@@ -115,20 +115,21 @@ export default function LandingPage() {
           display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', textAlign: 'center',
         }}>
           <p style={{ ...fontMono, fontSize: 12, letterSpacing: '0.85px', color: t.ash, textTransform: 'uppercase' }}>
-            Trusted by engineers at
+            Compatible with major ATS parsers
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 64, opacity: 0.5, filter: 'grayscale(1)', transition: 'all 0.5s' }}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 48, opacity: 0.45, filter: 'grayscale(1)', transition: 'all 0.5s' }}
             onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0)'; e.currentTarget.style.opacity = '1' }}
-            onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(1)'; e.currentTarget.style.opacity = '0.5' }}
+            onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(1)'; e.currentTarget.style.opacity = '0.45' }}
           >
             {[
-              { icon: 'hexagon', name: 'Acme Corp' },
-              { icon: 'change_history', name: 'Zenith' },
-              { icon: 'trip_origin', name: 'Globex' },
-              { icon: 'square', name: 'Initech' },
+              { name: 'greenhouse' },
+              { name: 'LEVER' },
+              { name: 'workday' },
+              { name: 'Taleo' },
+              { name: 'Ashby' },
+              { name: 'bambooHR' },
             ].map(c => (
-              <div key={c.name} style={{ ...fontInter, fontSize: 24, fontWeight: 700, letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span className="material-symbols-outlined">{c.icon}</span>
+              <div key={c.name} style={{ ...fontInter, fontSize: 24, fontWeight: 600, letterSpacing: '-0.3px', color: t.onSurface, whiteSpace: 'nowrap' }}>
                 {c.name}
               </div>
             ))}
@@ -138,12 +139,12 @@ export default function LandingPage() {
         {/* ── Precision Templates (Features) ── */}
         <section id="features" style={{ padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 32 }}>
           <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', textAlign: 'center' }}>
-            <span style={{ ...fontMono, fontSize: 12, letterSpacing: '0.85px', color: t.ash, textTransform: 'uppercase' }}>01. Precision Layouts</span>
+            <span style={{ ...fontMono, fontSize: 12, letterSpacing: '0.85px', color: t.ash, textTransform: 'uppercase' }}>Precision Layouts</span>
             <h2 style={{ ...fontInter, fontSize: 40, lineHeight: 1.2, letterSpacing: '-0.84px', fontWeight: 600, color: t.onSurface }}>
               Designed for parsing, built for humans.
             </h2>
             <p style={{ ...fontInter, fontSize: 16, lineHeight: 1.5, letterSpacing: '-0.19px', color: t.ash, maxWidth: 672 }}>
-              Our templates are strictly single-column, mathematically spaced, and rigorously tested against standard ATS parsers.
+              Our templates feature strictly single-column, mathematically spaced layouts, rigorously tested against modern and legacy ATS parsers.
             </p>
           </div>
 
@@ -151,51 +152,69 @@ export default function LandingPage() {
             {[
               {
                 tag: 'Dev', title: 'The Standard',
-                desc: 'A ruthless, single-column execution optimized for maximum data density.',
+                desc: 'A high-density, single-column layout optimized for maximum technical bullet points and skill matrices.',
                 preview: (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>Dev</div>
-                    <div style={{ width: '100%', height: 8, background: t.surfBright, borderRadius: 4 }} />
-                    <div style={{ width: '66%', height: 8, background: t.surfBright, borderRadius: 4, marginBottom: 6 }} />
-                    <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
-                    <div style={{ width: '83%', height: 4, background: t.surfCont, borderRadius: 4 }} />
-                    <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 5, position: 'relative', ...fontInter, fontSize: 11, lineHeight: 1.4 }}>
+                    <div style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 8px', borderRadius: 4 }}>Dev</div>
+                    <div style={{ fontWeight: 600, color: t.onSurface, fontSize: 12, paddingRight: 40 }}>Senior Backend Engineer — Edge Platform</div>
+                    <div style={{ color: t.ash }}>
+                      <div>• Cut p95 latency by 40% via Redis-backed caching layer</div>
+                      <div>• Sharded Postgres to 12 shards, scaling to 1.2B rows/day</div>
+                      <div>• Rebuilt CI/CD, cutting deploy time from 45m to 8m</div>
+                      <div>• Led migration of 6 services to Kubernetes on AWS</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span style={{ background: 'rgba(103,152,255,0.15)', color: t.primaryCont, ...fontMono, fontSize: 9, padding: '2px 7px', borderRadius: 3, letterSpacing: '0.4px' }}>+40% LATENCY DROP</span>
+                      <span style={{ background: 'rgba(103,152,255,0.15)', color: t.primaryCont, ...fontMono, fontSize: 9, padding: '2px 7px', borderRadius: 3, letterSpacing: '0.4px' }}>3x DEPLOY SPEED</span>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 2 }}>
+                      {['Go', 'React', 'K8s', 'Postgres', 'Redis', 'gRPC', 'Terraform', 'Kafka'].map(s => (
+                        <span key={s} style={{ border: `1px solid ${t.graphite}`, color: t.ash, fontSize: 9, padding: '2px 7px', borderRadius: 3 }}>{s}</span>
+                      ))}
+                    </div>
                   </div>
                 ),
               },
               {
                 tag: 'Lead', title: 'The Executive',
-                desc: 'Centered typographic hierarchy designed for management and staff-level roles.',
+                desc: 'A centered typographic hierarchy designed to emphasize leadership impact and key milestones.',
                 preview: (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>Lead</div>
-                    <div style={{ width: '50%', height: 12, background: t.surfBright, borderRadius: 4, margin: '0 auto', marginBottom: 6 }} />
-                    <div style={{ width: '100%', height: 1, background: t.steelBorder, marginBottom: 6 }} />
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <div style={{ width: '25%', minHeight: 20, background: t.surfCont, borderRadius: 4 }} />
-                      <div style={{ width: '75%', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                        <div style={{ width: '100%', height: 4, background: t.surfBright, borderRadius: 4 }} />
-                        <div style={{ width: '100%', height: 4, background: t.surfBright, borderRadius: 4 }} />
-                      </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', ...fontInter, fontSize: 11, lineHeight: 1.4, textAlign: 'center' }}>
+                    <div style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 8px', borderRadius: 4 }}>Lead</div>
+                    <div style={{ fontWeight: 600, color: t.onSurface, fontSize: 13 }}>VP of Engineering</div>
+                    <div style={{ color: t.ash, fontSize: 10 }}>Acme Corp · 2021 — Present</div>
+                    <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
+                      <span style={{ background: 'rgba(103,152,255,0.15)', color: t.primaryCont, ...fontMono, fontSize: 9, padding: '3px 9px', borderRadius: 12, letterSpacing: '0.3px' }}>MANAGED $15M BUDGET</span>
+                      <span style={{ background: 'rgba(103,152,255,0.15)', color: t.primaryCont, ...fontMono, fontSize: 9, padding: '3px 9px', borderRadius: 12, letterSpacing: '0.3px' }}>LED 25+ ENG TEAM</span>
+                    </div>
+                    <div style={{ width: '100%', height: 1, background: t.steelBorder, margin: '2px 0' }} />
+                    <div style={{ color: t.ash, textAlign: 'left' }}>
+                      <div>• Grew org from 4 to 120 engineers across 3 time zones</div>
+                      <div>• Drove platform P&L to $38M annual revenue</div>
+                      <div>• Delivered 40% margin improvement in 2 fiscal years</div>
+                      <div>• Established OKR cadence adopted company-wide</div>
                     </div>
                   </div>
                 ),
               },
               {
-                tag: 'Data', title: 'The Academic',
-                desc: 'A structured two-column layout for extensive publication and patent lists.',
+                tag: 'Data', title: 'The Analyst',
+                desc: 'A structured, linear format designed to cleanly separate key achievements, metrics, and technical competencies.',
                 preview: (
-                  <div style={{ display: 'flex', gap: 6, width: '100%', height: '100%', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 6px', borderRadius: 4 }}>Data</div>
-                    <div style={{ width: '33%', borderRight: `1px solid ${t.steelBorder}`, display: 'flex', flexDirection: 'column', gap: 4, paddingRight: 4 }}>
-                      <div style={{ width: '100%', height: 8, background: t.surfBright, borderRadius: 4, marginBottom: 6 }} />
-                      <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
-                      <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 5, position: 'relative', ...fontInter, fontSize: 11, lineHeight: 1.4 }}>
+                    <div style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(103,152,255,0.2)', color: t.primaryCont, ...fontMono, fontSize: 10, padding: '2px 8px', borderRadius: 4 }}>Data</div>
+                    <div style={{ fontWeight: 600, color: t.onSurface, fontSize: 12, paddingRight: 40 }}>Analytics Engineer — Growth</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 3, color: t.ash }}>
+                      <div style={{ display: 'flex', gap: 8 }}><span style={{ color: t.graphite, ...fontMono, fontSize: 9, minWidth: 92 }}>LANGUAGES</span><span>Python · SQL</span></div>
+                      <div style={{ display: 'flex', gap: 8 }}><span style={{ color: t.graphite, ...fontMono, fontSize: 9, minWidth: 92 }}>WAREHOUSE</span><span>Snowflake · BigQuery</span></div>
+                      <div style={{ display: 'flex', gap: 8 }}><span style={{ color: t.graphite, ...fontMono, fontSize: 9, minWidth: 92 }}>ORCHESTRATION</span><span>dbt · Airflow · Looker</span></div>
                     </div>
-                    <div style={{ width: '67%', display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 4 }}>
-                      <div style={{ width: '100%', height: 8, background: t.surfBright, borderRadius: 4, marginBottom: 6 }} />
-                      <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
-                      <div style={{ width: '100%', height: 4, background: t.surfCont, borderRadius: 4 }} />
+                    <div style={{ width: '100%', height: 1, background: t.steelBorder, margin: '2px 0' }} />
+                    <div style={{ color: t.ash }}>
+                      <div>• Modeled pipelines serving 2M daily-active users</div>
+                      <div>• Cut reporting runtime by 65% with incremental dbt runs</div>
+                      <div>• Lifted data-quality pass rate from 82% to 99.9%</div>
+                      <div>• Automated anomaly alerts, saving 10 hrs/week</div>
                     </div>
                   </div>
                 ),
@@ -207,7 +226,7 @@ export default function LandingPage() {
                 cursor: 'default',
               }}>
                 <div style={{
-                  height: 192, background: t.deepCoal, borderRadius: 4,
+                  height: 240, background: t.deepCoal, borderRadius: 4,
                   border: `1px solid ${t.steelBorder}`, padding: 16, overflow: 'hidden',
                 }}>
                   {card.preview}
@@ -244,35 +263,22 @@ export default function LandingPage() {
 
       {/* ═══════ Footer ═══════ */}
       <footer className="reveal" style={{
-        width: '100%', background: t.deepCoal, padding: '64px 0', borderTop: `1px solid ${t.steelBorder}`,
+        width: '100%', background: t.deepCoal, padding: '32px 0', borderTop: `1px solid ${t.steelBorder}`,
         marginTop: 64,
       }}>
         <div style={{
           padding: '0 24px', maxWidth: 1200, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{
-              ...fontInter, fontSize: 24, fontWeight: 600, letterSpacing: '-0.5px',
-              color: t.onSurface, display: 'flex', alignItems: 'center', gap: 8,
-            }}>
-              CareerSync
-            </div>
-            <p style={{ ...fontInter, fontSize: 14, lineHeight: 1.5, letterSpacing: '-0.17px', color: t.ash }}>
-              © 2026 CareerSync Systems. Built for precision.
-            </p>
+          <div style={{
+            ...fontInter, fontSize: 24, fontWeight: 600, letterSpacing: '-0.5px',
+            color: t.onSurface, display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            CareerSync
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'flex-end' }}>
-            {['Privacy Policy', 'Terms of Service', 'Security', 'Status', 'API Documentation'].map(l => (
-              <a key={l} href="#" style={{
-                ...fontInter, fontSize: 14, lineHeight: 1.5, letterSpacing: '-0.17px',
-                color: t.ash, textDecoration: 'none', transition: 'color 0.15s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = t.onSurface}
-              onMouseLeave={e => e.currentTarget.style.color = t.ash}
-              >{l}</a>
-            ))}
-          </div>
+          <p style={{ ...fontInter, fontSize: 14, lineHeight: 1.5, letterSpacing: '-0.17px', color: t.ash }}>
+            © 2026 CareerSync. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
