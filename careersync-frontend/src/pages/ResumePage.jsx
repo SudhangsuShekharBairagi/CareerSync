@@ -1,37 +1,8 @@
 import { useState } from 'react'
 import { t, fontInter, fontMono, s } from '../theme/tokens'
+import { buildResume } from '../api/resumeBuilderApi'
 
 const placeholderDesc = `Senior Frontend Engineer at Stripe — 5 years of experience building scalable React applications. Proficient in TypeScript, Next.js, GraphQL, and design systems. Led a team of 4 engineers to redesign the merchant dashboard, reducing load time by 42%. Strong background in accessibility, performance optimization, and CI/CD pipelines.`
-
-const sampleResume = {
-  name: 'Alex Rivera',
-  title: 'Senior Frontend Engineer',
-  contact: { email: 'alex@email.com', phone: '+1 (555) 123-4567', location: 'San Francisco, CA', linkedin: 'linkedin.com/in/alexrivera' },
-  summary: 'Results-driven Senior Frontend Engineer with 5+ years of experience building high-performance web applications at scale. Proven track record of leading engineering teams and delivering impactful features at fintech companies.',
-  experience: [
-    {
-      role: 'Senior Frontend Engineer',
-      company: 'Stripe',
-      period: 'Jan 2021 – Present',
-      bullets: [
-        'Led a team of 4 engineers to redesign the merchant dashboard, reducing average load time by 42%',
-        'Architected a shared React component library used across 6 product teams, cutting UI dev time by 30%',
-        'Implemented end-to-end TypeScript migration for a 80k LOC codebase, eliminating 95% of runtime type errors',
-      ],
-    },
-    {
-      role: 'Frontend Engineer',
-      company: 'Robinhood',
-      period: 'Jun 2019 – Dec 2020',
-      bullets: [
-        'Built real-time stock trading UI with WebSockets and React, handling 50k concurrent users',
-        'Improved Lighthouse performance score from 62 to 94 through lazy loading and code splitting',
-      ],
-    },
-  ],
-  skills: ['React', 'Next.js', 'TypeScript', 'GraphQL', 'Node.js', 'CI/CD', 'Figma', 'Accessibility (WCAG)'],
-  education: { degree: 'B.S. Computer Science', school: 'UC Berkeley', year: '2019' },
-}
 
 function Section({ title, children, last }) {
   return (
@@ -46,41 +17,44 @@ export default function ResumePage() {
   const [description, setDescription] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [generated, setGenerated] = useState(false)
+  const [resume, setResume] = useState(null)
   const [progress, setProgress] = useState(0)
   const [copied, setCopied] = useState(false)
   const [charFocus, setCharFocus] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleGenerate = () => {
-    if (!description.trim()) return
+  const handleGenerate = async () => {
+    if (!description.trim() || isGenerating) return
+    setError('')
     setIsGenerating(true)
     setProgress(0)
     setGenerated(false)
+    setResume(null)
 
     let p = 0
     const interval = setInterval(() => {
       p += Math.random() * 18 + 5
-      if (p >= 100) {
-        p = 100
-        clearInterval(interval)
-        setTimeout(() => {
-          setIsGenerating(false)
-          setGenerated(true)
-          const history = JSON.parse(localStorage.getItem('resumeHistory') || '[]')
-          history.unshift({
-            id: Date.now(),
-            createdAt: new Date().toISOString(),
-            description: description.trim().slice(0, 120),
-            resume: sampleResume,
-          })
-          localStorage.setItem('resumeHistory', JSON.stringify(history.slice(0, 20)))
-        }, 300)
-      }
-      setProgress(Math.min(p, 100))
+      if (p >= 90) p = 90
+      setProgress(p)
     }, 200)
+
+    try {
+      const data = await buildResume(description.trim())
+      clearInterval(interval)
+      setProgress(100)
+      setResume(data)
+      setGenerated(true)
+    } catch (err) {
+      clearInterval(interval)
+      setError(err.message || 'Failed to generate resume. Please try again.')
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const handleCopy = () => {
-    const text = `${sampleResume.name} — ${sampleResume.title}\n\n${sampleResume.summary}`
+    if (!resume) return
+    const text = `${resume.name} — ${resume.title}\n\n${resume.summary}`
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -89,7 +63,9 @@ export default function ResumePage() {
   const handleReset = () => {
     setGenerated(false)
     setDescription('')
+    setResume(null)
     setProgress(0)
+    setError('')
   }
 
   return (
@@ -144,6 +120,12 @@ export default function ResumePage() {
               </span>
             ))}
           </div>
+
+          {error && (
+            <div style={{ marginTop: '14px', background: 'rgba(255, 77, 79, 0.1)', border: '1px solid rgba(255, 77, 79, 0.4)', borderRadius: '8px', padding: '10px 12px', fontSize: '12px', color: '#ff6b6b' }}>
+              {error}
+            </div>
+          )}
 
           {/* Generate button */}
           <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -237,10 +219,10 @@ export default function ResumePage() {
           <div style={{ ...s.card, padding: '40px', maxWidth: '780px', margin: '0 auto', background: t.cardCarbon, position: 'relative', overflow: 'hidden' }}>
             {/* Name & contact */}
             <div style={{ marginBottom: '28px', paddingBottom: '24px', borderBottom: `1px solid ${t.steelBorder}` }}>
-              <h2 style={{ fontSize: '28px', fontWeight: 800, color: t.onSurface, margin: '0 0 4px', letterSpacing: '-0.5px' }}>{sampleResume.name}</h2>
-              <div style={{ fontSize: '15px', color: t.primaryCont, fontWeight: 600, marginBottom: '12px' }}>{sampleResume.title}</div>
+              <h2 style={{ fontSize: '28px', fontWeight: 800, color: t.onSurface, margin: '0 0 4px', letterSpacing: '-0.5px' }}>{resume.name}</h2>
+              <div style={{ fontSize: '15px', color: t.primaryCont, fontWeight: 600, marginBottom: '12px' }}>{resume.title}</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                {Object.entries(sampleResume.contact).map(([k, v]) => (
+                {Object.entries(resume.contact || {}).map(([k, v]) => (
                   <span key={k} style={{ fontSize: '12px', color: t.fog, display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: t.primaryCont }} />
                     {v}
@@ -250,11 +232,11 @@ export default function ResumePage() {
             </div>
 
             <Section title="Professional Summary">
-              <p style={{ fontSize: '13px', color: t.ash, lineHeight: 1.7, margin: 0 }}>{sampleResume.summary}</p>
+              <p style={{ fontSize: '13px', color: t.ash, lineHeight: 1.7, margin: 0 }}>{resume.summary}</p>
             </Section>
 
             <Section title="Experience">
-              {sampleResume.experience.map((exp) => (
+              {(resume.experience || []).map((exp) => (
                 <div key={exp.company} style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
                     <span style={{ fontSize: '14px', fontWeight: 700, color: t.onSurface }}>{exp.role}</span>
@@ -262,7 +244,7 @@ export default function ResumePage() {
                   </div>
                   <div style={{ fontSize: '12px', color: t.primaryCont, fontWeight: 600, marginBottom: '8px' }}>{exp.company}</div>
                   <ul style={{ margin: 0, paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    {exp.bullets.map((b) => (
+                    {(exp.bullets || []).map((b) => (
                       <li key={b} style={{ fontSize: '12.5px', color: t.ash, lineHeight: 1.6 }}>{b}</li>
                     ))}
                   </ul>
@@ -272,21 +254,23 @@ export default function ResumePage() {
 
             <Section title="Skills">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {sampleResume.skills.map((sk) => (
+                {(resume.skills || []).map((sk) => (
                   <span key={sk} style={{ background: t.deepCoal, border: `1px solid ${t.steelBorder}`, color: t.primaryLight, fontSize: '12px', padding: '4px 12px', borderRadius: '6px', fontWeight: 500 }}>{sk}</span>
                 ))}
               </div>
             </Section>
 
-            <Section title="Education" last>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: t.onSurface }}>{sampleResume.education.degree}</div>
-                  <div style={{ fontSize: '12px', color: t.primaryCont, fontWeight: 600 }}>{sampleResume.education.school}</div>
+            {resume.education && (
+              <Section title="Education" last>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: t.onSurface }}>{resume.education.degree}</div>
+                    <div style={{ fontSize: '12px', color: t.primaryCont, fontWeight: 600 }}>{resume.education.school}</div>
+                  </div>
+                  <span style={{ fontSize: '11px', ...fontMono, color: t.fog }}>{resume.education.year}</span>
                 </div>
-                <span style={{ fontSize: '11px', ...fontMono, color: t.fog }}>{sampleResume.education.year}</span>
-              </div>
-            </Section>
+              </Section>
+            )}
           </div>
         </div>
       )}

@@ -5,6 +5,7 @@ import com.careersync.careersync_backend.dto.gemini.GeminiRequest;
 import com.careersync.careersync_backend.dto.gemini.GeminiResponse;
 import com.careersync.careersync_backend.dto.gemini.Part;
 import com.careersync.careersync_backend.dto.resume.ResumeAnalysis;
+import com.careersync.careersync_backend.dto.resume.ResumeDocument;
 import com.careersync.careersync_backend.service.GeminiService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -32,10 +33,6 @@ public class GeminiServiceImpl implements GeminiService {
     @Override
     public ResumeAnalysis analyzeResume(String resumeText) {
 
-        String url =
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key="
-                        + apiKey;
-
         String prompt = """
                 Analyze the following resume.
 
@@ -61,6 +58,70 @@ public class GeminiServiceImpl implements GeminiService {
                 Resume:
                 """ + resumeText;
 
+        String text = callGemini(prompt);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ResumeAnalysis analysis =
+                objectMapper.readValue(text, ResumeAnalysis.class);
+
+        return analysis;
+    }
+
+    @Override
+    public ResumeDocument buildResume(String description) {
+
+        String prompt = """
+                Create a professional, ATS-optimized resume based on the following career description.
+
+                Use a realistic name and plausible, professional details consistent with the description.
+
+                Return ONLY valid JSON.
+
+                Do not wrap the response in markdown.
+
+                {
+                  "name": "",
+                  "title": "",
+                  "contact": {
+                    "email": "",
+                    "phone": "",
+                    "location": "",
+                    "linkedin": ""
+                  },
+                  "summary": "",
+                  "experience": [
+                    {
+                      "role": "",
+                      "company": "",
+                      "period": "",
+                      "bullets": []
+                    }
+                  ],
+                  "skills": [],
+                  "education": {
+                    "degree": "",
+                    "school": "",
+                    "year": ""
+                  }
+                }
+
+                Career description:
+                """ + description;
+
+        String text = callGemini(prompt);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readValue(text, ResumeDocument.class);
+    }
+
+    private String callGemini(String prompt) {
+
+        String url =
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key="
+                        + apiKey;
+
         Part part = new Part(prompt);
 
         Content content = new Content();
@@ -84,19 +145,12 @@ public class GeminiServiceImpl implements GeminiService {
 
         GeminiResponse geminiResponse = response.getBody();
 
-        String text = geminiResponse
+        return geminiResponse
                 .getCandidates()
                 .get(0)
                 .getContent()
                 .getParts()
                 .get(0)
                 .getText();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        ResumeAnalysis analysis =
-                objectMapper.readValue(text, ResumeAnalysis.class);
-
-        return analysis;
     }
 }

@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { t, fontInter, fontMono, s } from '../theme/tokens'
+import {
+  getResumeBuilderHistory,
+  deleteResumeBuilder,
+  clearResumeBuilderHistory,
+} from '../api/resumeBuilderApi'
 
 function timeAgo(iso) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -18,25 +23,47 @@ export default function ResumeHistoryPage() {
   const [history, setHistory] = useState([])
   const [selected, setSelected] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('resumeHistory') || '[]')
-    setHistory(stored)
+    let cancelled = false
+    getResumeBuilderHistory()
+      .then((list) => {
+        if (cancelled) return
+        setHistory((list || []).map((item) => ({ ...item, resume: item })))
+      })
+      .catch(() => {
+        if (!cancelled) setError('Failed to load resume history')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
-  const handleDelete = (id) => {
-    const updated = history.filter((h) => h.id !== id)
-    setHistory(updated)
-    localStorage.setItem('resumeHistory', JSON.stringify(updated))
-    if (selected?.id === id) setSelected(null)
+  const handleDelete = async (id) => {
+    try {
+      await deleteResumeBuilder(id)
+      setHistory((prev) => prev.filter((h) => h.id !== id))
+      if (selected?.id === id) setSelected(null)
+    } catch {
+      setError('Failed to delete resume')
+    }
     setConfirmDelete(null)
   }
 
-  const handleClearAll = () => {
-    setHistory([])
-    setSelected(null)
-    localStorage.removeItem('resumeHistory')
+  const handleClearAll = async () => {
+    try {
+      await clearResumeBuilderHistory()
+      setHistory([])
+      setSelected(null)
+    } catch {
+      setError('Failed to clear history')
+    }
   }
 
   return (
@@ -70,8 +97,22 @@ export default function ResumeHistoryPage() {
         </div>
       </div>
 
+      {/* Error banner */}
+      {error && (
+        <div style={{ background: 'rgba(255, 77, 79, 0.1)', border: '1px solid rgba(255, 77, 79, 0.4)', borderRadius: '8px', padding: '10px 12px', fontSize: '12px', color: '#ff6b6b' }}>
+          {error}
+        </div>
+      )}
+
+      {/* Loading */}
+      {loading && (
+        <div style={{ ...s.card, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '64px 24px' }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: '1px', color: t.fog }}>LOADING...</span>
+        </div>
+      )}
+
       {/* Empty state */}
-      {history.length === 0 && (
+      {!loading && history.length === 0 && (
         <div style={{ ...s.card, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 24px', textAlign: 'center', gap: '16px' }}>
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: t.deepCoal, border: `1px solid ${t.steelBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={t.fog} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -92,7 +133,7 @@ export default function ResumeHistoryPage() {
       )}
 
       {/* List + Preview layout */}
-      {history.length > 0 && (
+      {!loading && history.length > 0 && (
         <div style={{ display: 'grid', gridTemplateColumns: selected ? '340px 1fr' : '1fr', gap: '18px', alignItems: 'start' }}>
           {/* History list */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
